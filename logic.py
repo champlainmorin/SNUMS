@@ -50,15 +50,17 @@ def CreateOU(connection, name, base_location):
 #CreateOU(testCase, basedn)
 
 # Create Group
-def CreateGroup(name, OU_DN):
-    pass
+def DelUser(connection, dn):
+    connection.delete_s(dn)
 
 # Create User
 def CreateUser(connection, name, password, OU_DN):
     connect = connection
+
     hashedPassword = hashlib.md5(password.encode('utf-8'))
     digest = hashedPassword.digest()
     shadowEntry = b"{CRYPT}" + name.encode('utf-8') + b":" + b"$1$" + digest + b"::" + b"::" + b":99999:" + b"::" + b"::" + b"::"
+    
     user_dn = b"cn=" + name.encode('utf-8') + b"," + OU_DN.encode('utf-8')
     user_attributes = {
         "objectClass" : [b"inetOrgPerson", b"person", b"top", b"posixAccount", b"shadowAccount"],
@@ -123,3 +125,4 @@ if __name__ == "__main__":
     print(GetOUs(connect, basedn))
     CreateUser(connect,"zachary","password","ou=test,dc=snums,dc=local") # Done successfully.
     print(GetUsers(connect,basedn)) # Done successfully.
+    DelUser(connect, "cn=zachary,ou=test,dc=snums,dc=local")

@@ -22,6 +22,13 @@ def setSelectedUser(user):
     selectedUser.set(user[0])
     print(selectedUser.get())
 
+def deleteUser():
+    try:
+        logic.DelUser(connection, selectedUser.get())
+        UserGet()
+    except:
+        pass
+
 def UserGet():
     mainInfoList.clear() # Clear information list.
     
@@ -61,6 +68,7 @@ def createUserMenu():
         ou_dn = ou_dn_var.get()
         print([username, password, ou_dn])
         logic.CreateUser(connection, username, password, ou_dn)
+        UserGet()
         popup.destroy()
 
     popup = Toplevel(root)
@@ -113,5 +121,7 @@ selectedUserLabel = Label(rightFrame, textvariable=selectedUser)
 selectedUserLabel.grid(row=0, column=0, padx=10, pady=5)
 createUserButton = Button(rightFrame, command=createUserMenu, text="Create User")
 createUserButton.grid(row=1,column=0,padx=10,pady=5)
+deleteUserButton = Button(rightFrame, command=deleteUser, text="Delete Selected User")
+deleteUserButton.grid(row=2,column=0,padx=10,pady=5)
 
 root.mainloop()
